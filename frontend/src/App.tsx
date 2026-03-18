@@ -1,4 +1,4 @@
-import './app.css'
+import './App.css'
 import {Routes,Route,Link,Navigate} from "react-router-dom"
 
 import Signup from "./pages/Signup"
