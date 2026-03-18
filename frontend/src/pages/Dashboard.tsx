@@ -74,11 +74,14 @@ export default function Dashboard() {
         onChange={(e) => setTitle(e.target.value)}
       />
 
+    <label>
+      Select Date:
       <input
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
       />
+    </label>
 
       <button onClick={addTodo}>Add Todo</button>
 
