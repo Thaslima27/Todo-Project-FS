@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .database import engine, Base, SessionLocal
 from . import schemas, crud, auth
-from .models import Todo   # ✅ IMPORTANT
+from .models import Todo 
 
 app = FastAPI()
 
@@ -64,7 +64,7 @@ def create_category(cat: schemas.CategoryCreate, db: Session = Depends(get_db)):
 @app.post("/todos")
 def create_todo(
     todo: schemas.TodoCreate,
-    user = Depends(auth.get_current_user),   # ✅ FIX
+    user = Depends(auth.get_current_user),   
     db: Session = Depends(get_db)
 ):
     return crud.create_todo(db, todo, user.id)
@@ -72,7 +72,7 @@ def create_todo(
 
 @app.get("/todos")
 def get_todos(
-    user = Depends(auth.get_current_user),   # ✅ FIX
+    user = Depends(auth.get_current_user), 
     db: Session = Depends(get_db)
 ):
     return crud.get_user_todos(db, user.id)
@@ -85,7 +85,7 @@ def get_todos(
 @app.delete("/todos/{todo_id}")
 def delete_todo(
     todo_id: int,
-    user = Depends(auth.get_current_user),   # ✅ FIX
+    user = Depends(auth.get_current_user),   
     db: Session = Depends(get_db)
 ):
     todo = db.query(Todo).filter(
