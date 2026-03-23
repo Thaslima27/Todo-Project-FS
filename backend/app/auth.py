@@ -24,7 +24,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # PASSWORD
 # -------------------------
 def hash_password(password: str):
-    return pwd_context.hash(password)
+    return pwd_context.hash(password[:72])
 
 
 def verify_password(plain, hashed):
