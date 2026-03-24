@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = "https://todo-project-fs-6.onrender.com"
 
 // LOGIN (FORM DATA)
 export async function login(email: string, password: string) {
