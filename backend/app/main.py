@@ -9,6 +9,10 @@ from .models import Todo
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+    return {"message": "API is running 🚀"}  
+
 # create tables
 Base.metadata.create_all(bind=engine)
 
@@ -28,10 +32,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-@app.get("/")
-def read_root():
-    return {"message": "API is running 🚀"}  
 
 
 # -------------------
