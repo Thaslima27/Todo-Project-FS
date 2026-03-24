@@ -12,8 +12,12 @@ export async function login(email: string, password: string) {
       password: password
     })
   })
+console.log("STATUS:",response.status)
 
-  return response.json()
+const data = await response.json()
+console.log("RESPOND DATA:" , data)
+
+  return data
 }
 
 // SIGNUP
