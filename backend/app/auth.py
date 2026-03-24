@@ -24,6 +24,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # PASSWORD
 # -------------------------
 def hash_password(password: str):
+    if len(password) > 72:
+        password = password[:72]
     return pwd_context.hash(password)
 
 

@@ -29,6 +29,10 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+def read_root():
+    return {"message": "API is running 🚀"}  
+
 
 # -------------------
 # AUTH
