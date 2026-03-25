@@ -1,9 +1,11 @@
 import './App.css'
 import {Routes,Route,Link,Navigate} from "react-router-dom"
 
+
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
+import PrivateRoute from "./PrivateRoute"
 
 function App(){
 
@@ -26,14 +28,21 @@ return(
 <Route path="/" element={<Navigate to="/login" />} /> {/* redirect to login */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
 
-</Routes>
+ {/* 🔐 PRIVATE ROUTE */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } 
+        />
 
-</div>
+      </Routes>
 
-)
-
+    </div>
+  )
 }
 
 export default App
