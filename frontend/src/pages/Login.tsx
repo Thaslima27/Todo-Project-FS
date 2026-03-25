@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { login } from "../api/api"
 
@@ -10,6 +10,16 @@ function Login(){
   const [isError, setIsError] = useState(false)   // ✅ track type
 
   const navigate = useNavigate()
+
+    // ✅ AUTO REDIRECT IF ALREADY LOGGED IN
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+
+    if (token) {
+      navigate("/dashboard")
+    }
+  }, [])
+
 
   async function handleLogin(){
     try{
