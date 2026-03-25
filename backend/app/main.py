@@ -18,7 +18,7 @@ Base.metadata.create_all(bind=engine)
 
 origins = [
     "http://localhost:5173",
-    "https://todo-list-fs.netlify.app"
+    "https://todo-lists-fs.netlify.app"
 ]
 
 # CORS
