@@ -1,58 +1,99 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { getTodos, createTodo, deleteTodo } from "../api/api"
 
 export default function Dashboard() {
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState("")
   const [todos, setTodos] = useState<any[]>([])
   const [search, setSearch] = useState("")
+  const [message, setMessage] = useState("")   // ✅ message state
 
   // 🔹 LOAD TODOS
   async function loadTodos() {
-    const data = await getTodos()
+    try {
+      const data = await getTodos()
 
-    if (data.detail) {
-      alert("Session expired. Login again")
-      localStorage.removeItem("token")
-      navigate("/login")
-    } else {
-      setTodos(data)
+      if (data.detail) {
+        setMessage("Session expired. Login again ❌")
+        localStorage.removeItem("token")
+        navigate("/login", { replace: true })
+      } else {
+        setTodos(data)
+      }
+
+    } catch (error) {
+      console.error(error)
+      setMessage("Error loading todos ❌")
     }
   }
 
+  // 🔹 INITIAL LOAD + LOGIN MESSAGE
   useEffect(() => {
     loadTodos()
-  }, [])
+
+    // ✅ show login success message
+    if (location.state?.message) {
+      setMessage(location.state.message)
+
+      setTimeout(() => {
+        setMessage("")
+        navigate(location.pathname, { replace: true }) // clear state
+      }, 2000)
+    }
+
+  }, [location.state])
 
   // 🔹 ADD TODO
   async function addTodo() {
     if (!title || !date) {
-      alert("Enter title and date")
+      setMessage("Enter title and date ⚠️")
       return
     }
 
-    await createTodo(title, date)
+    try {
+      await createTodo(title, date)
 
-    setTitle("")
-    setDate("")
+      setMessage("Todo added successfully ✅")
 
-    loadTodos()
+      setTitle("")
+      setDate("")
+
+      loadTodos()
+
+      setTimeout(() => setMessage(""), 2000)
+
+    } catch (error) {
+      console.error(error)
+      setMessage("Error adding todo ❌")
+    }
   }
 
-  // 🔹 DELETE
+  // 🔹 DELETE TODO
   async function handleDelete(id: number) {
-    await deleteTodo(id)
-    loadTodos()
+    try {
+      await deleteTodo(id)
+
+      setMessage("Todo deleted successfully ✅")
+
+      loadTodos()
+
+      setTimeout(() => setMessage(""), 2000)
+
+    } catch (error) {
+      console.error(error)
+      setMessage("Error deleting todo ❌")
+    }
   }
 
   // 🔹 LOGOUT
   function handleLogout() {
     localStorage.removeItem("token")
-   navigate("/login")
+    navigate("/login", { replace: true })
   }
 
   return (
@@ -61,6 +102,9 @@ export default function Dashboard() {
       <h1>Dashboard</h1>
 
       <button onClick={handleLogout}>Logout</button>
+
+      {/* ✅ MESSAGE DISPLAY */}
+      {message && <p className="success-msg">{message}</p>}
 
       {/* 🔍 SEARCH */}
       <input
@@ -77,20 +121,19 @@ export default function Dashboard() {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-    <label>
-      Select Date:
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
-    </label>
+      <label>
+        Select Date:
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+      </label>
 
       <button onClick={addTodo}>Add Todo</button>
 
       <h2>Todo List</h2>
 
-      {/* 📋 TODOS */}
       {todos
         .filter((t: any) =>
           t.title.toLowerCase().includes(search.toLowerCase())

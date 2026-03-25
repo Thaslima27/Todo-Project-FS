@@ -4,68 +4,71 @@ import { login } from "../api/api"
 
 function Login(){
 
-const [email,setEmail] = useState<string>("")
-const [password,setPassword] = useState<string>("")
+  const [email,setEmail] = useState<string>("")
+  const [password,setPassword] = useState<string>("")
+  const [message, setMessage] = useState("")
+  const [isError, setIsError] = useState(false)   // ✅ track type
 
-const navigate = useNavigate()
+  const navigate = useNavigate()
 
-async function handleLogin(){
+  async function handleLogin(){
+    try{
+      const data = await login(email,password)
 
-try{
+      if(data.access_token){
+        localStorage.setItem("token", data.access_token)
 
-const data = await login(email,password)
+        setIsError(false)
+        setMessage("Login successful ✅")
 
-console.log(data)
+        setTimeout(() => {
+          navigate("/dashboard", {
+            state: { message: "Login successful ✅" }   // ✅ pass to dashboard
+          })
+        }, 1000)
 
-if(data.access_token){
-  localStorage.setItem("token", data.access_token)
-  navigate("/dashboard")
-} else {
-  alert(data.detail || "Login failed")
-}
+      } else {
+        setIsError(true)
+        setMessage(data.detail || "Login failed ❌")
+      }
 
-}catch(error){
+    }catch(error){
+      console.error(error)
+      setIsError(true)
+      setMessage("Server error ❌")
+    }
+  }
 
-console.error(error)
+  return(
+    <div className="container">
+      <h2>Login</h2>
 
-alert("Error during login")
+      <p className={isError ? "error-msg" : "success-msg"}>
+  {message}
+</p>
+      <input
+        type="email"
+        placeholder="Enter email"
+        value={email}
+        onChange={(e)=>setEmail(e.target.value)}
+      />
 
-}
+      <br/><br/>
 
-}
+      <input
+        type="password"
+        placeholder="Enter password"
+        value={password}
+        onChange={(e)=>setPassword(e.target.value)}
+      />
 
-return(
+      <br/><br/>
 
-<div className="container">
-<h2>Login</h2>
-
-
-<input
-type="email"
-placeholder="Enter email"
-value={email}
-onChange={(e)=>setEmail(e.target.value)}
-/>
-
-<br/><br/>
-
-<input
-type="password"
-placeholder="Enter password"
-value={password}
-onChange={(e)=>setPassword(e.target.value)}
-/>
-
-<br/><br/>
-
-<button onClick={handleLogin}>
-Login
-</button>
-
-</div>
-
-)
-
+      <button onClick={handleLogin}>
+        Login
+      </button>
+    </div>
+  )
 }
 
 export default Login

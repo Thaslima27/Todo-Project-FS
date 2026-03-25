@@ -82,3 +82,14 @@ nav a:active {
 h2, h3, h4, h5, h6, p, span, li, button, input {
   font-family: 'Poppins', sans-serif;
 }
+
+/* ✅ Message styles */
+.success-msg {
+  color: green;
+  font-weight: bold;
+}
+
+.error-msg {
+  color: red;
+  font-weight: bold;
+}
