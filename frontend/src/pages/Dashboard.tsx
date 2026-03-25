@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { getTodos, createTodo, deleteTodo } from "../api/api"
 
 export default function Dashboard() {
+
+  const navigate = useNavigate()
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState("")
@@ -15,7 +18,7 @@ export default function Dashboard() {
     if (data.detail) {
       alert("Session expired. Login again")
       localStorage.removeItem("token")
-      window.location.href = "/login"
+      navigate("/login")
     } else {
       setTodos(data)
     }
@@ -49,7 +52,7 @@ export default function Dashboard() {
   // 🔹 LOGOUT
   function handleLogout() {
     localStorage.removeItem("token")
-    window.location.href = "/login"
+   navigate("/login")
   }
 
   return (
