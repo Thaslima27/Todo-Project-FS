@@ -47,43 +47,97 @@ body {
 
 /* App title */
 h1 {
-  font-family: 'Pacifico', cursive; /* This makes the title cursive */
+  font-family: 'Pacifico', cursive;
   font-size: 3rem;
   color: #ff6b81;
   margin-bottom: 25px;
   text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Navigation */
-nav {
-  margin-bottom: 25px;
-}
-nav a {
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #4b0082;
-  margin: 0 12px;
-  transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
-}
-nav a:hover {
-  color: #1dd1a1;
-  text-shadow: 0 0 8px #1dd1a1;
-  transform: scale(1.1);
+/* Headings */
+h2 {
+  margin-bottom: 15px;
 }
 
-/* Optional: links active effect */
-nav a:active {
-  transform: scale(1.05);
+h3 {
+  margin-top: 20px;
 }
 
-/* Ensure headings and paragraphs use proper fonts */
-h2, h3, h4, h5, h6, p, span, li, button, input {
-  font-family: 'Poppins', sans-serif;
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+  color: #333;
 }
 
-/* ✅ Message styles */
+/* Inputs */
+.input-box, .search-box {
+  width: 80%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background: #6c5ce7;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #4834d4;
+}
+
+/* Logout button */
+.logout-btn {
+  background: #ff4757;
+  float: right;
+}
+
+.logout-btn:hover {
+  background: #e84118;
+}
+
+/* Add button */
+.add-btn {
+  background: #1dd1a1;
+}
+
+.add-btn:hover {
+  background: #10ac84;
+}
+
+/* Delete button */
+.delete-btn {
+  background: #ff6b81;
+  margin-top: 5px;
+}
+
+.delete-btn:hover {
+  background: #ff4757;
+}
+
+/* Todo Card */
+.todo-card {
+  background: #f1f2f6;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 10px auto;
+  width: 80%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Message styles */
 .success-msg {
   color: green;
   font-weight: bold;
@@ -93,3 +147,4 @@ h2, h3, h4, h5, h6, p, span, li, button, input {
   color: red;
   font-weight: bold;
 }
+

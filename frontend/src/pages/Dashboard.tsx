@@ -14,10 +14,10 @@ export default function Dashboard() {
   const [search, setSearch] = useState("")
   const [message, setMessage] = useState("")
 
-  // ✅ Zustand logout
+  // Zustand logout
   const logout = useAuthStore((state) => state.logout)
 
-  // 🔹 LOAD TODOS
+  // Load todos
   async function loadTodos() {
     try {
       const data = await getTodos()
@@ -25,8 +25,10 @@ export default function Dashboard() {
       if (data.detail) {
         setMessage("Session expired. Login again ❌")
 
-        logout()   // ✅ Zustand instead of localStorage
-        navigate("/login", { replace: true })
+        setTimeout(() => {
+          logout()
+          navigate("/login", { replace: true })
+        }, 1500)
 
       } else {
         setTodos(data)
@@ -38,23 +40,22 @@ export default function Dashboard() {
     }
   }
 
-  // 🔹 INITIAL LOAD + MESSAGE
+  // Initial load
   useEffect(() => {
     loadTodos()
 
-    // ✅ show login success message
     if (location.state?.message) {
       setMessage(location.state.message)
 
       setTimeout(() => {
         setMessage("")
-        navigate(location.pathname, { replace: true })
+        navigate(0)
       }, 2000)
     }
 
-  }, [location.state])
+  }, [location, navigate])
 
-  // 🔹 ADD TODO
+  // Add todo
   async function addTodo() {
     if (!title || !date) {
       setMessage("Enter title and date ⚠️")
@@ -79,7 +80,7 @@ export default function Dashboard() {
     }
   }
 
-  // 🔹 DELETE TODO
+  // Delete todo
   async function handleDelete(id: number) {
     try {
       await deleteTodo(id)
@@ -96,49 +97,65 @@ export default function Dashboard() {
     }
   }
 
-  // 🔹 LOGOUT
+  // Logout
   function handleLogout() {
-    logout()   // ✅ Zustand handles token removal
+    logout()
     navigate("/login", { replace: true })
   }
 
   return (
-    <div className="container">
+    <div>
 
-      <h1>Dashboard</h1>
+      <h2>Dashboard</h2>
 
-      <button onClick={handleLogout}>Logout</button>
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
 
-      {/* ✅ MESSAGE */}
-      {message && <p className="success-msg">{message}</p>}
+      {/* Message */}
+      {message && (
+        <p className={message.includes("❌") ? "error-msg" : "success-msg"}>
+          {message}
+        </p>
+      )}
 
-      {/* 🔍 SEARCH */}
+      {/* Search */}
+      <label>Search Todos</label>
       <input
+        className="search-box"
+        type="text"
         placeholder="Search todos..."
+        title="Search Todos"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <h2>Create Todo</h2>
+      <h3>Create Todo</h3>
 
+      <label>Todo Title</label>
       <input
-        placeholder="Todo title"
+        className="input-box"
+        type="text"
+        placeholder="Enter todo title"
+        title="Todo Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <label>
-        Select Date:
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-      </label>
+      <label>Select Date</label>
+      <input
+        className="input-box"
+        type="date"
+        title="Select Date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
 
-      <button onClick={addTodo}>Add Todo</button>
+      <button className="add-btn" onClick={addTodo}>
+        Add Todo
+      </button>
 
-      <h2>Todo List</h2>
+      <h3>Todo List</h3>
 
       {todos
         .filter((t: any) =>
@@ -146,10 +163,13 @@ export default function Dashboard() {
         )
         .map((todo: any) => (
           <div key={todo.id} className="todo-card">
-            <h3>{todo.title}</h3>
+            <h4>{todo.title}</h4>
             <p>{todo.due_date || todo.date}</p>
 
-            <button onClick={() => handleDelete(todo.id)}>
+            <button
+              className="delete-btn"
+              onClick={() => handleDelete(todo.id)}
+            >
               Delete
             </button>
           </div>
