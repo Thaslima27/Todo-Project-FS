@@ -1,95 +1,138 @@
-/* Import stylish fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Pacifico&display=swap');
-
-/* Apply fonts globally */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* Body background */
-body {
-  background: linear-gradient(135deg, #f093fb, #f5576c, #54a0ff);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 50px;
-  animation: gradientBG 15s ease infinite;
-  background-size: 400% 400%;
-}
-
-/* Animated gradient background */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Main container */
+/* MAIN CONTAINER */
 .container {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 40px 30px;
-  border-radius: 25px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  min-width: 300px;
-  max-width: 500px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 550px;
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.container:hover {
-  transform: scale(1.02);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
-}
-
-/* App title */
+/* TITLE */
 h1 {
-  font-family: 'Pacifico', cursive; /* This makes the title cursive */
-  font-size: 3rem;
-  color: #ff6b81;
-  margin-bottom: 25px;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2f3542;
 }
 
-/* Navigation */
-nav {
-  margin-bottom: 25px;
+/* SUB TITLE */
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #444;
 }
+
+/* NAVBAR */
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 nav a {
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #4b0082;
-  margin: 0 12px;
-  transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
+  margin: 0 10px;
+  color: #57606f;
+  font-weight: 600;
+  transition: 0.3s;
 }
+
 nav a:hover {
-  color: #1dd1a1;
-  text-shadow: 0 0 8px #1dd1a1;
-  transform: scale(1.1);
+  color: #3742fa;
 }
 
-/* Optional: links active effect */
-nav a:active {
-  transform: scale(1.05);
+/* INPUT */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
 }
 
-/* Ensure headings and paragraphs use proper fonts */
-h2, h3, h4, h5, h6, p, span, li, button, input {
-  font-family: 'Poppins', sans-serif;
+input:focus {
+  border-color: #3742fa;
 }
 
-/* ✅ Message styles */
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #3742fa;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #2f3542;
+}
+
+/* LOGOUT BUTTON */
+button:first-of-type {
+  width: auto;
+  float: right;
+  background: #ff4757;
+}
+
+button:first-of-type:hover {
+  background: #e84118;
+}
+
+/* MESSAGE */
 .success-msg {
   color: green;
-  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .error-msg {
   color: red;
-  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* SEARCH */
+input[placeholder="Search todos..."] {
+  margin-top: 15px;
+}
+
+/* TODO CARD */
+.todo-card {
+  background: #f1f2f6;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* TODO TEXT */
+.todo-card h3 {
+  font-size: 16px;
+  color: #2f3542;
+}
+
+.todo-card p {
+  font-size: 12px;
+  color: #888;
+}
+
+/* DELETE BUTTON */
+.todo-card button {
+  width: auto;
+  background: #ff6b81;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.todo-card button:hover {
+  background: #ff4757;
 }

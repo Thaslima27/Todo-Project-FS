@@ -1,6 +1,8 @@
+import { useAuthStore } from "../store/useAuthStore"
+
 const API_URL = "https://todo-project-fs-6.onrender.com"
 
-// LOGIN (FORM DATA)
+// 🔐 LOGIN
 export async function login(email: string, password: string) {
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -12,15 +14,12 @@ export async function login(email: string, password: string) {
       password: password
     })
   })
-console.log("STATUS:",response.status)
 
-const data = await response.json()
-console.log("RESPOND DATA:" , data)
-
+  const data = await response.json()
   return data
 }
 
-// SIGNUP
+// 📝 SIGNUP
 export async function signup(email: string, password: string) {
   const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
@@ -33,9 +32,9 @@ export async function signup(email: string, password: string) {
   return response.json()
 }
 
-// GET TODOS
+// 📥 GET TODOS
 export async function getTodos() {
-  const token = localStorage.getItem("token")
+  const token = useAuthStore.getState().token   // ✅ Zustand
 
   const response = await fetch(`${API_URL}/todos`, {
     headers: {
@@ -46,9 +45,9 @@ export async function getTodos() {
   return response.json()
 }
 
-// CREATE TODO (FIXED)
+// ➕ CREATE TODO
 export async function createTodo(title: string, due_date: string) {
-  const token = localStorage.getItem("token")
+  const token = useAuthStore.getState().token   // ✅ Zustand
 
   const response = await fetch(`${API_URL}/todos`, {
     method: "POST",
@@ -58,7 +57,7 @@ export async function createTodo(title: string, due_date: string) {
     },
     body: JSON.stringify({
       title,
-      due_date,   // ✅ correct field
+      due_date,
       category_id: 1
     })
   })
@@ -66,9 +65,9 @@ export async function createTodo(title: string, due_date: string) {
   return response.json()
 }
 
-// DELETE
+// ❌ DELETE TODO
 export async function deleteTodo(id: number) {
-  const token = localStorage.getItem("token")
+  const token = useAuthStore.getState().token   // ✅ Zustand
 
   await fetch(`${API_URL}/todos/${id}`, {
     method: "DELETE",

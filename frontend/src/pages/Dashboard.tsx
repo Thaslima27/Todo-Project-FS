@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { getTodos, createTodo, deleteTodo } from "../api/api"
+import { useAuthStore } from "../store/useAuthStore"
 
 export default function Dashboard() {
 
@@ -11,7 +12,10 @@ export default function Dashboard() {
   const [date, setDate] = useState("")
   const [todos, setTodos] = useState<any[]>([])
   const [search, setSearch] = useState("")
-  const [message, setMessage] = useState("")   // ✅ message state
+  const [message, setMessage] = useState("")
+
+  // ✅ Zustand logout
+  const logout = useAuthStore((state) => state.logout)
 
   // 🔹 LOAD TODOS
   async function loadTodos() {
@@ -20,8 +24,10 @@ export default function Dashboard() {
 
       if (data.detail) {
         setMessage("Session expired. Login again ❌")
-        localStorage.removeItem("token")
+
+        logout()   // ✅ Zustand instead of localStorage
         navigate("/login", { replace: true })
+
       } else {
         setTodos(data)
       }
@@ -32,7 +38,7 @@ export default function Dashboard() {
     }
   }
 
-  // 🔹 INITIAL LOAD + LOGIN MESSAGE
+  // 🔹 INITIAL LOAD + MESSAGE
   useEffect(() => {
     loadTodos()
 
@@ -42,7 +48,7 @@ export default function Dashboard() {
 
       setTimeout(() => {
         setMessage("")
-        navigate(location.pathname, { replace: true }) // clear state
+        navigate(location.pathname, { replace: true })
       }, 2000)
     }
 
@@ -92,7 +98,7 @@ export default function Dashboard() {
 
   // 🔹 LOGOUT
   function handleLogout() {
-    localStorage.removeItem("token")
+    logout()   // ✅ Zustand handles token removal
     navigate("/login", { replace: true })
   }
 
@@ -103,7 +109,7 @@ export default function Dashboard() {
 
       <button onClick={handleLogout}>Logout</button>
 
-      {/* ✅ MESSAGE DISPLAY */}
+      {/* ✅ MESSAGE */}
       {message && <p className="success-msg">{message}</p>}
 
       {/* 🔍 SEARCH */}
@@ -141,7 +147,7 @@ export default function Dashboard() {
         .map((todo: any) => (
           <div key={todo.id} className="todo-card">
             <h3>{todo.title}</h3>
-            <p>{todo.date}</p>
+            <p>{todo.due_date || todo.date}</p>
 
             <button onClick={() => handleDelete(todo.id)}>
               Delete
