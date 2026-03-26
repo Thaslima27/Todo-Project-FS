@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .database import engine, Base, SessionLocal
 from . import schemas, crud, auth
-from .models import Todo 
+from .models import Todo
+
 
 app = FastAPI()
 
