@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { login } from "../api/api"
+import { useAuthStore } from "../store/useAuthStore"
 
 function Login() {
   const [email, setEmail] = useState("")
@@ -10,8 +11,9 @@ function Login() {
 
   const navigate = useNavigate()
   const location = useLocation()
+  
+  const setToken = useAuthStore((state) => state.setToken)
 
-  // ✅ Receive message from Signup
   useEffect(() => {
     if (location.state?.message) {
       setMessage(location.state.message)
@@ -24,33 +26,28 @@ function Login() {
       const data = await login(email, password)
 
       if (data.access_token) {
-        localStorage.setItem("token", data.access_token)
-
-        setIsError(false)
-        setMessage("Login successful ✅")
-
-        setTimeout(() => {
-          navigate("/dashboard")
-        }, 1000)
-
+        setToken(data.access_token)
+        navigate("/dashboard")
       } else {
         setIsError(true)
         setMessage(data.detail || "Login failed ❌")
       }
 
-    } catch (error) {
+    } catch {
       setIsError(true)
       setMessage("Server error ❌")
     }
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>Login</h2>
 
-      <p className={isError ? "error-msg" : "success-msg"}>
-        {message}
-      </p>
+      {message && (
+        <p className={isError ? "error-msg" : "success-msg"}>
+          {message}
+        </p>
+      )}
 
       <input
         type="email"
@@ -59,8 +56,6 @@ function Login() {
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      <br /><br />
-
       <input
         type="password"
         placeholder="Enter password"
@@ -68,11 +63,18 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <br /><br />
+      <button onClick={handleLogin}>Login</button>
 
-      <button onClick={handleLogin}>
-        Login
-      </button>
+      {/* 🔥 Signup Link */}
+      <p>
+        Don't have an account?{" "}
+        <span
+          onClick={() => navigate("/signup")}
+          className="link"
+        >
+          Signup
+        </span>
+      </p>
     </div>
   )
 }

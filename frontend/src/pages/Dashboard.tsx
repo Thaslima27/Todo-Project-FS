@@ -3,6 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { getTodos, createTodo, deleteTodo } from "../api/api"
 import { useAuthStore } from "../store/useAuthStore"
 
+// ✅ Type (TSX correct)
+type Todo = {
+  id: number
+  title: string
+  due_date?: string
+  date?: string
+}
+
 export default function Dashboard() {
 
   const navigate = useNavigate()
@@ -10,14 +18,13 @@ export default function Dashboard() {
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState("")
-  const [todos, setTodos] = useState<any[]>([])
+  const [todos, setTodos] = useState<Todo[]>([])   // ✅ fixed type
   const [search, setSearch] = useState("")
   const [message, setMessage] = useState("")
 
-  // Zustand logout
   const logout = useAuthStore((state) => state.logout)
 
-  // Load todos
+  // 🔹 LOAD TODOS
   async function loadTodos() {
     try {
       const data = await getTodos()
@@ -40,7 +47,7 @@ export default function Dashboard() {
     }
   }
 
-  // Initial load
+  // 🔹 INITIAL LOAD
   useEffect(() => {
     loadTodos()
 
@@ -49,13 +56,12 @@ export default function Dashboard() {
 
       setTimeout(() => {
         setMessage("")
-        navigate(0)
       }, 2000)
     }
 
-  }, [location, navigate])
+  }, [location.state])
 
-  // Add todo
+  // 🔹 ADD TODO
   async function addTodo() {
     if (!title || !date) {
       setMessage("Enter title and date ⚠️")
@@ -80,7 +86,7 @@ export default function Dashboard() {
     }
   }
 
-  // Delete todo
+  // 🔹 DELETE TODO
   async function handleDelete(id: number) {
     try {
       await deleteTodo(id)
@@ -97,14 +103,14 @@ export default function Dashboard() {
     }
   }
 
-  // Logout
+  // 🔹 LOGOUT
   function handleLogout() {
     logout()
     navigate("/login", { replace: true })
   }
 
   return (
-    <div>
+    <div className="dashboard-container">
 
       <h2>Dashboard</h2>
 
@@ -112,68 +118,80 @@ export default function Dashboard() {
         Logout
       </button>
 
-      {/* Message */}
+      {/* MESSAGE */}
       {message && (
         <p className={message.includes("❌") ? "error-msg" : "success-msg"}>
           {message}
         </p>
       )}
 
-      {/* Search */}
-      <label>Search Todos</label>
-      <input
-        className="search-box"
-        type="text"
-        placeholder="Search todos..."
-        title="Search Todos"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* 🔍 SEARCH */}
+      <div className="section-box">
+        <h3>Search</h3>
 
-      <h3>Create Todo</h3>
+        <label htmlFor="search">Search Todos</label>
+        <input
+          id="search"
+          className="search-box"
+          type="text"
+          placeholder="Search todos..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <label>Todo Title</label>
-      <input
-        className="input-box"
-        type="text"
-        placeholder="Enter todo title"
-        title="Todo Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      {/* ➕ CREATE */}
+      <div className="section-box">
+        <h3>Create Todo</h3>
 
-      <label>Select Date</label>
-      <input
-        className="input-box"
-        type="date"
-        title="Select Date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
+        <label htmlFor="title">Todo Title</label>
+        <input
+          id="title"
+          className="input-box"
+          type="text"
+          placeholder="Enter todo title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <button className="add-btn" onClick={addTodo}>
-        Add Todo
-      </button>
+        <label htmlFor="date">Select Date</label>
+        <input
+          id="date"
+          className="input-box"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
 
-      <h3>Todo List</h3>
+        <button className="add-btn" onClick={addTodo}>
+          Add Todo
+        </button>
+      </div>
 
-      {todos
-        .filter((t: any) =>
-          t.title.toLowerCase().includes(search.toLowerCase())
-        )
-        .map((todo: any) => (
-          <div key={todo.id} className="todo-card">
-            <h4>{todo.title}</h4>
-            <p>{todo.due_date || todo.date}</p>
+      {/* 📋 LIST */}
+      <div className="section-box">
+        <h3>Todo List</h3>
 
-            <button
-              className="delete-btn"
-              onClick={() => handleDelete(todo.id)}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+        <div className="todo-list">
+          {todos
+            .filter((t) =>
+              t.title.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((todo) => (
+              <div key={todo.id} className="todo-card">
+                <h4>{todo.title}</h4>
+                <p>{todo.due_date || todo.date}</p>
+
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(todo.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+        </div>
+      </div>
 
     </div>
   )
