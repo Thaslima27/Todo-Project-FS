@@ -1,223 +1,209 @@
-/* Import stylish fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* Apply fonts globally */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
 
-/* Body background */
 body {
-  background: linear-gradient(135deg, #f093fb, #f5576c, #54a0ff);
-  min-height: 100vh;
+  margin:0;
+  background: #e9eef5;
+}
+
+/* ===== AUTH PAGES ===== */
+
+.login-wrapper {
+  height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 50px;
-  animation: gradientBG 15s ease infinite;
-  background-size: 400% 400%;
+  align-items: flex-start;   /* was center */
+  padding-top: 120px;        /* move card down */
 }
 
-/* Animated gradient background */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Big background circle */
+.login-wrapper::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: #3b82f6;
+  border-radius: 50%;
+  left: -200px;
+  top: -150px;
+  opacity: 0.4;
 }
 
-/* Main container */
-.container {
+/* Card */
+.login-card {
+  width: 360px;
+  background: #ffffff;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 40px 30px;
-  border-radius: 25px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  min-width: 300px;
-  max-width: 500px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding-bottom: 20px;
+  z-index: 1;
 }
 
-.container:hover {
-  transform: scale(1.02);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+/* Top blue area */
+.card-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* App title */
-.container h1 {
-  font-family: 'Pacifico', cursive;
-  font-size: 3rem;
-  color: #ff6b81;
-  margin-bottom: 25px;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+/* Icon circle */
+.icon-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #1e4ed8;
 }
 
-/* Headings */
-h2 {
-  margin-bottom: 15px;
-}
-
-h3 {
-  margin-top: 20px;
-}
-
-label {
-  display: block;
-  margin-top: 10px;
-  font-weight: 600;
-  color: #333;
+/* Title */
+.welcome {
+  margin-top: 15px;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 /* Inputs */
-.input-box, .search-box {
-  width: 80%;
-  padding: 10px;
-  margin: 8px 0;
+.glass-input {
+  width: 85%;
+  margin: 10px auto;
+  display: block;
+  padding: 12px;
   border-radius: 10px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
 }
 
-/* Buttons */
-button {
-  padding: 10px 15px;
+/* Button */
+.login-btn {
+  width: 85%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #1e4ed8;
+  color: white;
+  border:none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* OR divider */
+.or {
+  margin: 15px 0;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Bottom text */
+.signup-text {
+  font-size: 13px;
+}
+
+.signup-text span {
+  color: #1e4ed8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== DASHBOARD ===== */
+
+.dashboard-wrapper {
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  background: #eef2f7;
+}
+
+.dashboard-card {
+  width: 500px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-circle {
+  width: 35px;
+  height: 35px;
+  background: #1e4ed8;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Sections */
+.section {
+  margin-top: 25px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #1e4ed8;
+  color: white;
   border: none;
   border-radius: 10px;
-  background: #6c5ce7;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
 }
 
-button:hover {
-  background: #4834d4;
-}
-
-/* Logout button */
-.logout-btn {
-  background: #ff4757;
-  float: right;
-}
-
-.logout-btn:hover {
-  background: #e84118;
-}
-
-/* Add button */
-.add-btn {
-  background: #1dd1a1;
-}
-
-.add-btn:hover {
-  background: #10ac84;
-}
-
-/* Delete button */
-.delete-btn {
-  background: #ff6b81;
-  margin-top: 5px;
-}
-
-.delete-btn:hover {
-  background: #ff4757;
-}
-
-/* Todo Card */
-.todo-card {
-  background: #f1f2f6;
-  padding: 15px;
-  border-radius: 15px;
-  margin: 10px auto;
-  width: 80%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Message styles */
-.success-msg {
-  color: green;
-  font-weight: bold;
-}
-
-.error-msg {
-  color: red;
-  font-weight: bold;
-}
-
-
-/* ================= DASHBOARD IMPROVEMENTS ================= */
-
-/* Dashboard layout spacing */
-.dashboard-container {
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
-}
-
-/* Section box (each step like search, create, list) */
-.section-box {
-  background: rgba(255, 255, 255, 0.9);
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  text-align: left;
-}
-
-/* Section titles */
-.section-box h3 {
-  margin-bottom: 10px;
-  color: #2f3542;
-}
-
-/* Improve inputs */
-.input-box, .search-box {
-  width: 100%;
-}
-
-/* Improve buttons spacing */
-.add-btn {
-  margin-top: 15px;
-}
-
-/* Todo list grid */
-.todo-list {
+.todo-item {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-top: 10px;
 }
-
-/* Todo card upgraded */
-.todo-card {
-  background: linear-gradient(135deg, #dfe4ea, #f1f2f6);
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.todo-card:hover {
-  transform: translateY(-3px);
-}
-
-/* Todo title */
-.todo-card h4 {
-  margin-bottom: 5px;
-  color: #2f3542;
-}
-
-/* Date text */
-.todo-card p {
+.or {
+  margin: 20px 0;
   font-size: 13px;
-  color: #57606f;
+  color: #9ca3af;
+  position: relative;
 }
 
-/* Fix logout button position */
-.logout-btn {
-  float: none;
-  margin-bottom: 15px;
+.or::before,
+.or::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 40%;
+  background: #e5e7eb;
+  top: 50%;
+}
+
+.or::before {
+  left: 0;
+}
+
+.or::after {
+  right: 0;
 }

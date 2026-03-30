@@ -5,12 +5,25 @@ import { signup } from "../api/api"
 function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [message, setMessage] = useState("")
   const [isError, setIsError] = useState(false)
-
+  
   const navigate = useNavigate()
 
   async function handleSignup() {
+    if (!email || !password || !confirmPassword) {
+      setIsError(true)
+      setMessage("Please fill all fields")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setIsError(true)
+      setMessage("Passwords do not match")
+      return
+    }
+
     try {
       const data = await signup(email, password)
 
@@ -22,7 +35,7 @@ function Signup() {
           navigate("/login", {
             state: { message: "Signup successful! Please login" }
           })
-        }, 1000)
+        }, 1500)
 
       } else {
         setIsError(true)
@@ -35,44 +48,57 @@ function Signup() {
     }
   }
 
-  return (
-    <div className="container">
-      <h2>Signup</h2>
+return (
+  <div className="login-wrapper">
+    <div className="login-card">
+
+      <h1 className="welcome">Sign Up</h1>
 
       {message && (
-        <p className={isError ? "error-msg" : "success-msg"}>
+        <p className={isError ? "error" : "success"}>
           {message}
         </p>
       )}
 
       <input
+        className="glass-input"
         type="email"
-        placeholder="Enter email"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
+        className="glass-input"
         type="password"
-        placeholder="Enter password"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleSignup}>Signup</button>
+      <input
+        className="glass-input"
+        type="password"
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
 
-      {/* 🔥 Login Link */}
-      <p>
+      <button className="login-btn" onClick={handleSignup}>
+        Sign Up
+      </button>
+
+      <div className="or">Or</div>
+
+      <p className="signup-text">
         Already have an account?{" "}
-        <span
-          onClick={() => navigate("/login")}
-          className="link"
-        >
+        <span onClick={() => navigate("/login")}>
           Login
         </span>
       </p>
-    </div>
-  )
-}
 
+    </div>
+  </div>
+)
+}
 export default Signup

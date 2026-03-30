@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { getTodos, createTodo, deleteTodo } from "../api/api"
 import { useAuthStore } from "../store/useAuthStore"
 
-// ✅ Type (TSX correct)
 type Todo = {
   id: number
   title: string
@@ -12,185 +11,187 @@ type Todo = {
 }
 
 export default function Dashboard() {
-
   const navigate = useNavigate()
   const location = useLocation()
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState("")
-  const [todos, setTodos] = useState<Todo[]>([])   // ✅ fixed type
+  const [todos, setTodos] = useState<Todo[]>([])
   const [search, setSearch] = useState("")
   const [message, setMessage] = useState("")
 
   const logout = useAuthStore((state) => state.logout)
 
-  // 🔹 LOAD TODOS
+  // LOAD TODOS
   async function loadTodos() {
     try {
       const data = await getTodos()
 
       if (data.detail) {
-        setMessage("Session expired. Login again ❌")
+        setMessage("Session expired. Login again")
 
         setTimeout(() => {
           logout()
           navigate("/login", { replace: true })
         }, 1500)
-
       } else {
         setTodos(data)
       }
-
     } catch (error) {
       console.error(error)
-      setMessage("Error loading todos ❌")
+      setMessage("Error loading todos")
     }
   }
 
-  // 🔹 INITIAL LOAD
   useEffect(() => {
     loadTodos()
 
     if (location.state?.message) {
       setMessage(location.state.message)
-
-      setTimeout(() => {
-        setMessage("")
-      }, 2000)
+      setTimeout(() => setMessage(""), 2000)
     }
-
   }, [location.state])
 
-  // 🔹 ADD TODO
+  // ADD TODO
   async function addTodo() {
     if (!title || !date) {
-      setMessage("Enter title and date ⚠️")
+      setMessage("Enter title and date")
       return
     }
 
     try {
       await createTodo(title, date)
-
-      setMessage("Todo added successfully ✅")
+      setMessage("Todo added successfully")
 
       setTitle("")
       setDate("")
 
       loadTodos()
-
       setTimeout(() => setMessage(""), 2000)
-
     } catch (error) {
       console.error(error)
-      setMessage("Error adding todo ❌")
+      setMessage("Error adding todo")
     }
   }
 
-  // 🔹 DELETE TODO
+  // DELETE TODO
   async function handleDelete(id: number) {
     try {
       await deleteTodo(id)
-
-      setMessage("Todo deleted successfully ✅")
+      setMessage("Todo deleted successfully")
 
       loadTodos()
-
       setTimeout(() => setMessage(""), 2000)
-
     } catch (error) {
       console.error(error)
-      setMessage("Error deleting todo ❌")
+      setMessage("Error deleting todo")
     }
   }
 
-  // 🔹 LOGOUT
+  // LOGOUT
   function handleLogout() {
     logout()
     navigate("/login", { replace: true })
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-wrapper">
 
-      <h2>Dashboard</h2>
+      <div className="dashboard-card">
 
-      <button className="logout-btn" onClick={handleLogout}>
-        Logout
-      </button>
+        {/* ✅ NAVBAR */}
+        <div className="navbar">
+          <div className="logo">TaskFlow</div>
 
-      {/* MESSAGE */}
-      {message && (
-        <p className={message.includes("❌") ? "error-msg" : "success-msg"}>
-          {message}
-        </p>
-      )}
-
-      {/* 🔍 SEARCH */}
-      <div className="section-box">
-        <h3>Search</h3>
-
-        <label htmlFor="search">Search Todos</label>
-        <input
-          id="search"
-          className="search-box"
-          type="text"
-          placeholder="Search todos..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* ➕ CREATE */}
-      <div className="section-box">
-        <h3>Create Todo</h3>
-
-        <label htmlFor="title">Todo Title</label>
-        <input
-          id="title"
-          className="input-box"
-          type="text"
-          placeholder="Enter todo title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <label htmlFor="date">Select Date</label>
-        <input
-          id="date"
-          className="input-box"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-
-        <button className="add-btn" onClick={addTodo}>
-          Add Todo
-        </button>
-      </div>
-
-      {/* 📋 LIST */}
-      <div className="section-box">
-        <h3>Todo List</h3>
-
-        <div className="todo-list">
-          {todos
-            .filter((t) =>
-              t.title.toLowerCase().includes(search.toLowerCase())
-            )
-            .map((todo) => (
-              <div key={todo.id} className="todo-card">
-                <h4>{todo.title}</h4>
-                <p>{todo.due_date || todo.date}</p>
-
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(todo.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
+          <div className="nav-right">
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
+
+        {/* MESSAGE */}
+        {message && (
+          <p className={message.includes("Error") ? "error" : "success"}>
+            {message}
+          </p>
+        )}
+
+        {/* CREATE TODO */}
+        <div className="section">
+          <h3>Create Todo</h3>
+
+          <input
+            className="input"
+            type="text"
+            placeholder="Enter todo title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <input
+            className="input"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+
+          <button className="add-btn" onClick={addTodo}>
+            Add Todo
+          </button>
+        </div>
+
+        {/* SEARCH */}
+        <div className="section">
+          <h3>Search</h3>
+
+          <input
+            className="input"
+            type="text"
+            placeholder="Search todos..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* TODO LIST */}
+        <div className="section">
+          <h3>Your Todos</h3>
+
+          <div className="todo-list">
+            {todos.length === 0 ? (
+              <div className="empty-state">
+                No todos yet. Add your first task 🚀
+              </div>
+            ) : (
+              todos
+                .filter((t) =>
+                  t.title.toLowerCase().includes(search.toLowerCase())
+                )
+                .map((todo) => (
+                  <div key={todo.id} className="todo-item">
+
+                    <div>
+                      <div className="todo-title">{todo.title}</div>
+                      <div className="todo-date">
+                        {todo.due_date || todo.date}
+                      </div>
+                    </div>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(todo.id)}
+                    >
+                      Delete
+                    </button>
+
+                  </div>
+                ))
+            )}
+          </div>
+
+        </div>
+
       </div>
 
     </div>

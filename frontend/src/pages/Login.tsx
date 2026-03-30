@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { login } from "../api/api"
 import { useAuthStore } from "../store/useAuthStore"
 
@@ -10,18 +10,16 @@ function Login() {
   const [isError, setIsError] = useState(false)
 
   const navigate = useNavigate()
-  const location = useLocation()
-  
   const setToken = useAuthStore((state) => state.setToken)
 
-  useEffect(() => {
-    if (location.state?.message) {
-      setMessage(location.state.message)
-      setIsError(false)
-    }
-  }, [location])
 
   async function handleLogin() {
+    if (!email || !password) {
+      setIsError(true)
+      setMessage("Please enter email and password")
+      return
+    }
+
     try {
       const data = await login(email, password)
 
@@ -30,53 +28,56 @@ function Login() {
         navigate("/dashboard")
       } else {
         setIsError(true)
-        setMessage(data.detail || "Login failed ❌")
+        setMessage("Invalid email or password")
       }
-
     } catch {
       setIsError(true)
-      setMessage("Server error ❌")
+      setMessage("Server error")
     }
   }
+return (
+  <div className="login-wrapper">
+    <div className="login-card">
 
-  return (
-    <div className="container">
-      <h2>Login</h2>
+      <h1 className="welcome">Login</h1>
 
       {message && (
-        <p className={isError ? "error-msg" : "success-msg"}>
+        <p className={isError ? "error" : "success"}>
           {message}
         </p>
       )}
 
       <input
+        className="glass-input"
         type="email"
-        placeholder="Enter email"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
+        className="glass-input"
         type="password"
-        placeholder="Enter password"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin}>Login</button>
+      <button className="login-btn" onClick={handleLogin}>
+        Login
+      </button>
 
-      {/* 🔥 Signup Link */}
-      <p>
-        Don't have an account?{" "}
-        <span
-          onClick={() => navigate("/signup")}
-          className="link"
-        >
-          Signup
+      <div className="or">Or</div>
+
+      <p className="signup-text">
+        Don’t have an account?{" "}
+        <span onClick={() => navigate("/signup")}>
+          Sign Up
         </span>
       </p>
-    </div>
-  )
-}
 
+    </div>
+  </div>
+)
+}
 export default Login
