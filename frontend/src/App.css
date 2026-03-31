@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;   /* was center */
-  padding-top: 100px;        /* move card down */
+  padding-top: 120px;        /* move card down */
 }
 
 /* Big background circle */
@@ -26,7 +26,7 @@ body {
   position: absolute;
   width: 700px;
   height: 700px;
-  background: #75a0ea;
+  background: #dbeafe;
   border-radius: 50%;
   left: -200px;
   top: -150px;
@@ -127,9 +127,9 @@ body {
   position: absolute;
   width: 700px;
   height: 700px;
-  background: #75a0ea;
+  background: #dbeafe;
   border-radius: 50%;
-  left: -250px;
+  left: -3000px;
   top: -150px;
   opacity: 0.4;
 }
@@ -193,7 +193,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 12px;
-  background: #e2e5e9;
+  background: #f8fafc;
   border-radius: 10px;
   margin-top: 10px;
 }
@@ -220,4 +220,16 @@ body {
 
 .or::after {
   right: 0;
+}
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px;   /* 🔥 moves everything to middle */
+  align-items: center;
+}
+
+.app-title {
+  margin-bottom: 20px; /* space between title & card */
 }

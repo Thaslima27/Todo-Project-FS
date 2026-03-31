@@ -2,11 +2,9 @@ import { Outlet } from "react-router-dom";
 
 function Layout() {
   return (
-    <div>
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Todo App
-     </h1>
-        <Outlet />
+    <div className="layout-container">
+      <h1 className="app-title">TODO APP</h1>
+      <Outlet />
     </div>
   );
 }
