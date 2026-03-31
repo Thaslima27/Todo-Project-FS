@@ -7,7 +7,7 @@
 
 body {
   margin:0;
-  background: #e9eef5;
+  background:#dbeafe;
 }
 
 /* ===== AUTH PAGES ===== */
@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;   /* was center */
-  padding-top: 120px;        /* move card down */
+  padding-top: 100px;        /* move card down */
 }
 
 /* Big background circle */
@@ -26,7 +26,7 @@ body {
   position: absolute;
   width: 700px;
   height: 700px;
-  background: #3b82f6;
+  background: #75a0ea;
   border-radius: 50%;
   left: -200px;
   top: -150px;
@@ -116,8 +116,22 @@ body {
   min-height: 50vh;
   display: flex;
   justify-content: center;
-  padding-top: 50px;
-  background: #eef2f7;
+  padding-top: -10px;
+  position: relative;
+  background: #dbeafe;
+}
+
+/* SAME blue circle as login */
+.dashboard-wrapper::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: #75a0ea;
+  border-radius: 50%;
+  left: -250px;
+  top: -150px;
+  opacity: 0.4;
 }
 
 .dashboard-card {
@@ -179,7 +193,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 12px;
-  background: #f8fafc;
+  background: #e2e5e9;
   border-radius: 10px;
   margin-top: 10px;
 }

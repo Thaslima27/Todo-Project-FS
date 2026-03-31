@@ -101,8 +101,9 @@ export default function Dashboard() {
 
         {/* ✅ NAVBAR */}
         <div className="navbar">
+          <h1>
           <div className="logo">TaskFlow</div>
-
+          </h1>
           <div className="nav-right">
             <button className="logout-btn" onClick={handleLogout}>
               Logout
