@@ -25,7 +25,7 @@ origins = [
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -124,7 +124,7 @@ def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
 
     user = crud.get_user_by_email(db, req.email)
     print("User found:", user)
-    
+
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 

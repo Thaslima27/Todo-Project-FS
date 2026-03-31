@@ -133,7 +133,7 @@ def reset_password(db, token: str, new_password: str):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    hashed_password = pwd_context.hash(new_password)
+    hashed_password = hash_password(new_password)
     user.password = hashed_password
     db.commit()
 
