@@ -25,7 +25,7 @@ origins = [
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -120,12 +120,16 @@ class ForgotPasswordRequest(BaseModel):
 
 @app.post("/forgot-password")
 def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
-    user = crud.get_user_by_email(db, req.email)
+    print("Forgot password called for:", req.email)
 
+    user = crud.get_user_by_email(db, req.email)
+    print("User found:", user)
+    
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
     token = auth.create_reset_token(req.email)
+    print("Token generated:", token)
 
     return {
         "message": "Reset token generated",

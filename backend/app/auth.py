@@ -7,12 +7,13 @@ from sqlalchemy.orm import Session
 
 from . import crud, models
 from .database import SessionLocal
+import os 
 
 # password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # jwt config
-SECRET_KEY = "supersecretkey"
+SECRET_KEY = os.getenv("supersecretkey")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 2
 
@@ -119,19 +120,21 @@ def verify_reset_token(token: str):
     except JWTError:
         return None
 
+#reset fn
 
-def reset_password(db: Session, token: str, new_password: str):
-    email = verify_reset_token(token)
-
-    if not email:
+def reset_password(db, token: str, new_password: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+    except:
         raise HTTPException(status_code=400, detail="Invalid or expired token")
 
     user = crud.get_user_by_email(db, email)
-
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    user.password = hash_password(new_password)
+    hashed_password = pwd_context.hash(new_password)
+    user.password = hashed_password
     db.commit()
 
-    return {"message": "Password reset successful"} 
+    return {"message": "Password reset successful"}
