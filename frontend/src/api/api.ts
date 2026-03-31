@@ -20,13 +20,44 @@ export async function login(email: string, password: string) {
 }
 
 // 📝 SIGNUP
-export async function signup(email: string, password: string) {
+export async function signup( name:string, email: string, password: string) {
   const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ name, email, password })
+  })
+
+  return response.json()
+}
+
+//forgot password
+
+export async function forgotPassword(email: string) {
+  const response = await fetch(`${API_URL}/forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email })
+  })
+
+  return response.json()
+}
+
+//reset password
+
+export async function resetPassword(token: string, new_password: string) {
+  const response = await fetch(`${API_URL}/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      token,
+      new_password
+    })
   })
 
   return response.json()

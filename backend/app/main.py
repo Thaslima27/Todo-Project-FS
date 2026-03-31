@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base, SessionLocal
 from . import schemas, crud, auth
 from .models import Todo
-
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -46,7 +46,7 @@ def get_db():
 
 @app.post("/signup")
 def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    return auth.signup_user(db, user.email, user.password)
+    return auth.signup_user(db,user.name, user.email, user.password)
 
 
 @app.post("/login")
@@ -110,3 +110,35 @@ def delete_todo(
     db.commit()
 
     return {"message": "Todo deleted"}
+
+# -------------------
+# FORGOT PASSWORD
+# -------------------
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+@app.post("/forgot-password")
+def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, req.email)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    token = auth.create_reset_token(req.email)
+
+    return {
+        "message": "Reset token generated",
+        "reset_token": token
+    }
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+# -------------------
+# RESET PASSWORD
+# -------------------
+@app.post("/reset-password")
+def reset_password(req: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return auth.reset_password(db, req.token, req.new_password)

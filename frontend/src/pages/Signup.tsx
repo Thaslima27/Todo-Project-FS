@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { signup } from "../api/api"
 
 function Signup() {
+  const [name, setName]= useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -25,7 +26,7 @@ function Signup() {
     }
 
     try {
-      const data = await signup(email, password)
+      const data = await signup(name, email, password)
 
       if (data.id) {
         setIsError(false)
@@ -59,6 +60,15 @@ return (
           {message}
         </p>
       )}
+
+        {/* NAME FIELD */}
+        <input
+          className="glass-input"
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
       <input
         className="glass-input"

@@ -63,6 +63,14 @@ return (
         onChange={(e) => setPassword(e.target.value)}
       />
 
+
+        {/* FORGOT PASSWORD LINK */}
+        <p className="signup-text">
+          <span onClick={() => navigate("/forgot-password")}>
+            Forgot Password?
+          </span>
+        </p>
+
       <button className="login-btn" onClick={handleLogin}>
         Login
       </button>

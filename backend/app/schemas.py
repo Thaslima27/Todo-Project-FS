@@ -6,6 +6,7 @@ from datetime import date
 # USER
 # -------------------
 class UserCreate(BaseModel):
+    name: str
     email: str
     password: str
 
