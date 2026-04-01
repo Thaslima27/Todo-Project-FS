@@ -264,23 +264,40 @@ body {
   margin-top: 4px;
   font-weight: 500;
 }
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.filter-label {
+  width: 70px;
+  font-size: 14px;
+  color: #aaa;
+}
 
 .filter-buttons {
   display: flex;
   gap: 10px;
-  margin: 10px 0;
 }
 
 .filter-buttons button {
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border-radius: 10px;
   border: none;
+  background: #f7f4f4;
+  color: #0e0202;
   cursor: pointer;
-  background: #eee;
-  transition: 0.2s;
 }
 
 .filter-buttons button.active {
-  background: #4f46e5;
+  background: #655abe;
   color: white;
 }

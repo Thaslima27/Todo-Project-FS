@@ -16,7 +16,9 @@ export async function login(email: string, password: string) {
   })
 
   if (!response.ok) {
-    throw new Error("Login failed")
+    const text=await response.text();
+    console.error("LOGIN ERROR:",text);
+    throw new Error("Login failed");
   }
 
   return response.json()
@@ -87,7 +89,7 @@ export async function getTodos() {
 }
 
 // ➕ CREATE TODO
-export async function createTodo(title: string, due_date: string, category_id: number) {
+export async function createTodo(title: string, due_date: string, category_id: number, priority:string) {
   const token = useAuthStore.getState().token   // ✅ Zustand
 
   const response = await fetch(`${API_URL}/todos`, {
@@ -99,7 +101,8 @@ export async function createTodo(title: string, due_date: string, category_id: n
     body: JSON.stringify({
       title,
       due_date,
-      category_id
+      category_id,
+      priority
     })
   })
 

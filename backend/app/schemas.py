@@ -25,6 +25,7 @@ class TodoCreate(BaseModel):
     title: str
     due_date: date   # 👈 VERY IMPORTANT
     category_id: int
+    priority:str
 
 
 # -------------------

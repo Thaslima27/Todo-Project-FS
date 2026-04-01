@@ -43,6 +43,7 @@ def create_todo(db: Session, todo, user_id: int):
         title=todo.title,
         due_date=todo.due_date,
         user_id=user_id,
+        priority=todo.priority,
         category_id=todo.category_id
     )
     db.add(new_todo)

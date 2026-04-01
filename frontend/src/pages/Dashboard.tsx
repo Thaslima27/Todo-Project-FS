@@ -25,6 +25,15 @@ export default function Dashboard() {
   const [message, setMessage] = useState("")
   const [filter, setFilter] = useState("all") 
 
+  const [priority, setPriority] = useState("low")
+  const [priorityFilter, setPriorityFilter] = useState("all")
+
+  const categoryMap: any = {
+    1: "📁 General",
+    2: "📘 Study",
+    3: "🏠 Personal"
+  }
+
   const logout = useAuthStore((state) => state.logout)
 
   // LOAD TODOS
@@ -65,7 +74,7 @@ export default function Dashboard() {
     }
 
     try {
-      await createTodo(title, date, category)
+      await createTodo(title, date, category, priority)
       setMessage("Todo added successfully")
 
       setTitle("")
@@ -146,7 +155,7 @@ export default function Dashboard() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-          />
+          />  
 
           <select
             className="input"
@@ -156,6 +165,16 @@ export default function Dashboard() {
             <option value={1}>General</option>
             <option value={2}>Study</option>
             <option value={3}>Personal</option>
+          </select>
+
+          <select
+              className="input"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            >
+              <option value="low">🟢 Low</option>
+              <option value="medium">🟡 Medium</option>
+              <option value="high">🔴 High</option>
           </select>
 
           <button className="add-btn" onClick={addTodo}>
@@ -176,30 +195,70 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* ✅ CLEAN FILTER WITH ACTIVE */}
-        <div className="filter-buttons">
-          <button
-            className={filter === "all" ? "active" : ""}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </button>
+        <div className="filters-container">
 
-          <button
-            className={filter === "completed" ? "active" : ""}
-            onClick={() => setFilter("completed")}
-          >
-            Completed
-          </button>
+  {/* STATUS */}
+  <div className="filter-group">
+    <span className="filter-label">Status</span>
+    <div className="filter-buttons">
+      <button
+        className={filter === "all" ? "active" : ""}
+        onClick={() => setFilter("all")}
+      >
+        All
+      </button>
 
-           <button
-            className={filter === "pending" ? "active" : ""}
-            onClick={() => setFilter("pending")}
-          >
-            Pending
-          </button>
-        </div>
+      <button
+        className={filter === "completed" ? "active" : ""}
+        onClick={() => setFilter("completed")}
+      >
+        Completed
+      </button>
 
+      <button
+        className={filter === "pending" ? "active" : ""}
+        onClick={() => setFilter("pending")}
+      >
+        Pending
+      </button>
+    </div>
+  </div>
+
+  {/* PRIORITY */}
+  <div className="filter-group">
+    <span className="filter-label">Priority</span>
+    <div className="filter-buttons">
+      <button
+        className={priorityFilter === "all" ? "active" : ""}
+        onClick={() => setPriorityFilter("all")}
+      >
+        All
+      </button>
+
+      <button
+        className={priorityFilter === "high" ? "active" : ""}
+        onClick={() => setPriorityFilter("high")}
+      >
+        High
+      </button>
+
+      <button
+        className={priorityFilter === "medium" ? "active" : ""}
+        onClick={() => setPriorityFilter("medium")}
+      >
+        Medium
+      </button>
+
+      <button
+        className={priorityFilter === "low" ? "active" : ""}
+        onClick={() => setPriorityFilter("low")}
+      >
+        Low
+      </button>
+    </div>
+  </div>
+
+</div>
         {/* TODO LIST */}
         <div className="section">
           <h3>Your Todos</h3>
@@ -220,6 +279,12 @@ export default function Dashboard() {
                   if (filter === "pending") return !t.completed
                   return true
                 })
+
+                .filter((t: any) => {
+                  if (priorityFilter === "all") return true
+                  return t.priority === priorityFilter
+                })
+
                 .map((todo) => (
                   <div key={todo.id} className="todo-item">
 
@@ -240,6 +305,10 @@ export default function Dashboard() {
                         {todo.due_date || todo.date}
                       </div>
                     </div>
+
+                    <div className="todo-category">
+                        {categoryMap[todo.category_id || 1]}
+                    </div>              
 
                     <button
                       className="delete-btn"

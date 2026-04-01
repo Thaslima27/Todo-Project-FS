@@ -31,9 +31,11 @@ class Todo(Base):
     due_date = Column(Date)
     
     completed = Column(Boolean, default=False)
-    
+
     user_id = Column(Integer, ForeignKey("users.id"))
     category_id = Column(Integer, ForeignKey("categories.id"))
 
+    priority = Column(String, default="low")
+    
     owner = relationship("User", back_populates="todos")
     category = relationship("Category", back_populates="todos")
