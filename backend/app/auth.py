@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from . import crud, models
-from .database import SessionLocal
+from .database import get_db
 import os 
 
 # password hashing
@@ -73,8 +73,10 @@ def login_user(db: Session, email: str, password: str):
 # -------------------------
 # GET CURRENT USER
 # -------------------------
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    db = SessionLocal()
+def get_current_user(
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)    
+):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
