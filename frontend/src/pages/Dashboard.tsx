@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { getTodos, createTodo, deleteTodo } from "../api/api"
+import { getTodos, createTodo, deleteTodo, updateTodo } from "../api/api"
 import { useAuthStore } from "../store/useAuthStore"
 
 type Todo = {
@@ -8,6 +8,7 @@ type Todo = {
   title: string
   due_date?: string
   date?: string
+  completed?: boolean
 }
 
 export default function Dashboard() {
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [todos, setTodos] = useState<Todo[]>([])
   const [search, setSearch] = useState("")
   const [message, setMessage] = useState("")
+  const [filter, setFilter] = useState("all") 
 
   const logout = useAuthStore((state) => state.logout)
 
@@ -88,6 +90,12 @@ export default function Dashboard() {
     }
   }
 
+  // ✅ NEW
+  async function toggleComplete(id: number, current: boolean) {
+    await updateTodo(id, !current)
+    loadTodos()
+  }
+
   // LOGOUT
   function handleLogout() {
     logout()
@@ -155,6 +163,13 @@ export default function Dashboard() {
           />
         </div>
 
+        {/* ✅ FILTER */}
+        <div className="filter-buttons">
+          <button onClick={() => setFilter("all")}>All</button>
+          <button onClick={() => setFilter("completed")}>Completed</button>
+          <button onClick={() => setFilter("pending")}>Pending</button>
+        </div>
+
         {/* TODO LIST */}
         <div className="section">
           <h3>Your Todos</h3>
@@ -168,12 +183,28 @@ export default function Dashboard() {
               todos
                 .filter((t) =>
                   t.title.toLowerCase().includes(search.toLowerCase())
-                )
+               )
+                .filter((t) => {
+                  if (filter === "completed") return t.completed
+                  if (filter === "pending") return !t.completed
+                  return true
+                })
                 .map((todo) => (
                   <div key={todo.id} className="todo-item">
 
                     <div>
-                      <div className="todo-title">{todo.title}</div>
+                      <input
+                        type="checkbox"
+                        checked={todo.completed || false}
+                        onChange={() =>
+                          toggleComplete(todo.id, todo.completed || false)
+                        }
+                      />
+
+                      <div className={`todo-title ${todo.completed ? "done" : ""}`}>
+                        {todo.title}
+                      </div>
+
                       <div className="todo-date">
                         {todo.due_date || todo.date}
                       </div>
@@ -190,11 +221,9 @@ export default function Dashboard() {
                 ))
             )}
           </div>
-
         </div>
 
       </div>
-
     </div>
   )
 }

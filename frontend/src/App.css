@@ -233,3 +233,21 @@ body {
 .app-title {
   margin-bottom: 20px; /* space between title & card */
 }
+
+.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top:15px;
+  margin-bottom: 10px;
+}
+
+.filter-buttons button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}

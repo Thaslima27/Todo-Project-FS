@@ -106,6 +106,27 @@ export async function createTodo(title: string, due_date: string) {
   return response.json()
 }
 
+export async function updateTodo(id: number, completed: boolean) {
+  const token = useAuthStore.getState().token
+
+  const response = await fetch(`${API_URL}/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",   // ✅ IMPORTANT
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      completed: completed   // ✅ send in body
+    })
+  })
+
+  if (!response.ok) {
+    throw new Error("Failed to update todo")
+  }
+
+  return response.json()
+}
+
 // ❌ DELETE TODO
 export async function deleteTodo(id: number) {
   const token = useAuthStore.getState().token   // ✅ Zustand

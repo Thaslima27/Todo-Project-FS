@@ -79,6 +79,29 @@ def create_todo(
 ):
     return crud.create_todo(db, todo, user.id)
 
+class UpdateTodo(BaseModel):
+    completed: bool
+
+@app.put("/todos/{todo_id}")
+def update_todo(
+    todo_id: int,
+    data: UpdateTodo,
+    user = Depends(auth.get_current_user),
+    db: Session = Depends(get_db)
+):
+    todo = db.query(Todo).filter(
+        Todo.id == todo_id,
+        Todo.user_id == user.id
+    ).first()
+
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    todo.completed = data.completed
+    db.commit()
+    db.refresh(todo)
+
+    return todo
 
 @app.get("/todos")
 def get_todos(
