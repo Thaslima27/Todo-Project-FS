@@ -87,7 +87,7 @@ export async function getTodos() {
 }
 
 // ➕ CREATE TODO
-export async function createTodo(title: string, due_date: string) {
+export async function createTodo(title: string, due_date: string, category_id: number) {
   const token = useAuthStore.getState().token   // ✅ Zustand
 
   const response = await fetch(`${API_URL}/todos`, {
@@ -99,7 +99,7 @@ export async function createTodo(title: string, due_date: string) {
     body: JSON.stringify({
       title,
       due_date,
-      category_id: 1
+      category_id
     })
   })
 

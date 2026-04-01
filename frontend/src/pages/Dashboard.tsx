@@ -9,6 +9,7 @@ type Todo = {
   due_date?: string
   date?: string
   completed?: boolean
+  category_id?:number
 }
 
 export default function Dashboard() {
@@ -17,6 +18,8 @@ export default function Dashboard() {
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState("")
+  const [category, setCategory] = useState(1)
+
   const [todos, setTodos] = useState<Todo[]>([])
   const [search, setSearch] = useState("")
   const [message, setMessage] = useState("")
@@ -62,7 +65,7 @@ export default function Dashboard() {
     }
 
     try {
-      await createTodo(title, date)
+      await createTodo(title, date, category)
       setMessage("Todo added successfully")
 
       setTitle("")
@@ -90,7 +93,7 @@ export default function Dashboard() {
     }
   }
 
-  // ✅ NEW
+  // Complete toggle
   async function toggleComplete(id: number, current: boolean) {
     await updateTodo(id, !current)
     loadTodos()
@@ -145,6 +148,16 @@ export default function Dashboard() {
             onChange={(e) => setDate(e.target.value)}
           />
 
+          <select
+            className="input"
+            value={category}
+            onChange={(e) => setCategory(Number(e.target.value))}
+          >
+            <option value={1}>General</option>
+            <option value={2}>Study</option>
+            <option value={3}>Personal</option>
+          </select>
+
           <button className="add-btn" onClick={addTodo}>
             Add Todo
           </button>
@@ -163,11 +176,28 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* ✅ FILTER */}
+        {/* ✅ CLEAN FILTER WITH ACTIVE */}
         <div className="filter-buttons">
-          <button onClick={() => setFilter("all")}>All</button>
-          <button onClick={() => setFilter("completed")}>Completed</button>
-          <button onClick={() => setFilter("pending")}>Pending</button>
+          <button
+            className={filter === "all" ? "active" : ""}
+            onClick={() => setFilter("all")}
+          >
+            All
+          </button>
+
+          <button
+            className={filter === "completed" ? "active" : ""}
+            onClick={() => setFilter("completed")}
+          >
+            Completed
+          </button>
+
+           <button
+            className={filter === "pending" ? "active" : ""}
+            onClick={() => setFilter("pending")}
+          >
+            Pending
+          </button>
         </div>
 
         {/* TODO LIST */}
@@ -179,11 +209,12 @@ export default function Dashboard() {
               <div className="empty-state">
                 No todos yet. Add your first task 🚀
               </div>
-            ) : (
-              todos
+
+               ):(
+                todos
                 .filter((t) =>
                   t.title.toLowerCase().includes(search.toLowerCase())
-               )
+                )
                 .filter((t) => {
                   if (filter === "completed") return t.completed
                   if (filter === "pending") return !t.completed
